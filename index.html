@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+<title>Mapa Ruta del Café</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  
+<link rel="stylesheet" href="style.css" />
+<link href="https://fonts.googleapis.com/css?family=Bree+Serif&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+
+
+<script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
+<script src="https://kit.fontawesome.com/9c7499abbb.js" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="css/leaflet.extra-markers.min.css">
+<script src="js/leaflet.extra-markers.min.js"></script>
+<script type="text/javascript" src="js/map-rdc.js"></script>
+<script type="text/javascript" src="js/provincias.js"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+</head>
+
+<body>
+  <div id="overlay">
+    <img src="img/logo.png" alt="logo ruta del café">
+    <p>Descubre cómo se produce un café de excelente calidad, <br/> y las cataratas y bosques que rodean los cafetales.</p>
+    <select name="select-location" id="select-location">
+      <option value="0">Selecciona uno</option>
+    </select>
+  </div>
+  <div id=slide-in>
+    <button class='slide-in__boton'>Ocultar</button>
+    <p class="invitacion">El café nos acompaña en la casa o en el trabajo, pero <strong>¿qué hay detrás de una taza de café?</strong> . <br/>
+      Viaja a Jaén y San Ignacio, para descubrir como se produce un café de excelente calidad. 
+      Un viaje lleno de aromas, sabores y encuentro con los bosques y cataratas que rodean los cafetales.</p>
+    <h2 id="tituloAtractivo"></h2>
+    <p id="infoAtractivo"></p>
+    <div class='slide-in__imagen'></div>
+  </div>
+<div id='map'>
+</div>
+
+<script>
+var map = L.map('map', {
+    //center: new L.LatLng(-5.443126, -78.833394),
+    //zoom: 10,
+    zoomControl: false
+});
+
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+		}).addTo(map);
+
+// Zoom controls
+L.control.zoom({
+     position:'topright'
+}).addTo(map);
+
+
+//geojson provincias
+
+var estiloProvincia = {
+  'color': 'rgba(122,184,0)',
+  'weight': 2
+  //'opacity': 1
+}
+var provinciasRDC = L.geoJson(provincias, {
+ style: estiloProvincia,
+ onEachFeature: function (feature,layer) {
+        layer.bindPopup('<strong>Provincia</strong>: ' + feature.properties.PROVINCIA + '<br/><strong>Departamento</strong>: '+ feature.properties.DEPARTAMEN);
+ }
+}).addTo(map);
+
+
+// Marcadores ruta cafe
+var cafe = L.ExtraMarkers.icon({
+    icon: 'fa-coffee',
+    markerColor: 'white',
+    iconColor: 'rgba(122,184,0)',
+    shape: 'square',
+    prefix: 'fa'
+  });
+var agua = L.ExtraMarkers.icon({
+    icon: 'fa-water',
+    markerColor: 'white',
+    iconColor: '#477AC2',
+    shape: 'square',
+    prefix: 'fa'
+  });
+
+var punto = {
+    radius: 4,
+    fillColor: "#ff7800",
+    color: "#76381a",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+};
+
+var cafeVerde = L.ExtraMarkers.icon({
+    icon: 'fa-coffee',
+    markerColor: 'green',
+    iconColor: 'white',
+    shape: 'square',
+    prefix: 'fa'
+});
+
+var aguaAzul = L.ExtraMarkers.icon({
+    icon: 'fa-water',
+    markerColor: 'blue',
+    iconColor: 'white',
+    shape: 'square',
+    prefix: 'fa'
+  });
+
+var MapaRutaCafe = L.geoJson(mapardc, {
+  style: function(feature) {
+        switch (feature.properties.descripcion) {
+          case 'ruta': return {color: "#76381a"}; break
+        }
+    },
+  pointToLayer: function (feature, latlng) {
+    switch(feature.properties.descripcion) {
+        case 'finca': return L.marker(latlng, {icon: cafe})
+        break
+        case 'catarata': return L.marker(latlng, {icon: agua})
+        break
+        case 'laguna': return L.marker(latlng, {icon: agua})
+        break
+        case 'lugar':  return L.circleMarker(latlng, punto)
+        break         
+         }
+    },
+    onEachFeature: function (feature,layer) {
+      layer.on('click', function(e){
+        $('#slide-in').addClass('in');
+        $('#tituloAtractivo').html(layer.feature.properties.name);
+        $('#infoAtractivo').html(layer.feature.properties.resumen);
+        $('.slide-in__imagen').html('<img src='+layer.feature.properties.image+'>');
+        var lat= feature.geometry.coordinates[1] - 0.01
+        var long= feature.geometry.coordinates[0]
+        map.flyTo([lat,long],14,{
+              duration: 0.15
+            });
+        $('#select-location').val(layer.feature.properties.name);
+        switch (layer.feature.properties.descripcion) {
+          case 'finca': e.target.setIcon(cafeVerde)
+          break
+          case 'catarata': e.target.setIcon(aguaAzul)
+          break
+          case 'laguna': e.target.setICon(aguaAzul)
+          break
+        }
+      })
+    }         
+}).addTo(map)
+
+//Bounds
+map.fitBounds(provinciasRDC.getBounds(), {
+  padding: [5,5]
+});
+
+// slide-in ocultar
+$(document).on('click','.slide-in__boton',function() {
+			if($('#slide-in').hasClass('in')) {
+        $('#slide-in').removeClass('in');
+        map.fitBounds(provinciasRDC.getBounds(), {
+        padding: [5,5]
+        });
+      }
+      $('#select-location').val(0)
+    });
+
+// selector de atractivos
+mapardc.features.forEach(function(feature) {
+    if (feature.properties.descripcion === 'catarata' || feature.properties.descripcion === 'finca' || feature.properties.descripcion ==='laguna' ){
+        $('#select-location').append('<option value="'+feature.properties.name+'">'+feature.properties.name+'</option>');
+        }	
+});
+
+$(document).on('change','#select-location',function(e) {
+			var atractivo = e.target.value;
+			if(atractivo!==0) {
+				MapaRutaCafe.eachLayer(function(layer) {
+         if(layer.feature.properties.name===e.target.value){ 
+            $('#slide-in').addClass('in');
+            $('#tituloAtractivo').html(layer.feature.properties.name);
+            $('#infoAtractivo').html(layer.feature.properties.resumen);
+            $('.slide-in__imagen').html('<img src='+layer.feature.properties.image+'>');
+            var lat= layer.feature.geometry.coordinates[1] - 0.01
+            var long= layer.feature.geometry.coordinates[0]
+            map.flyTo([lat,long],14,{
+              duration: 0.20
+            });
+            switch (layer.feature.properties.descripcion) {
+            case 'finca': e.target.setIcon(cafeVerde)
+            break
+            case 'catarata': e.target.setIcon(aguaAzul)
+            break
+            case 'laguna': e.target.setICon(aguaAzul)
+            break
+        }
+          }
+        });
+      }
+    });
+    
+
+</script>
+
+
+</body>
+
+</html>
