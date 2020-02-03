@@ -104,7 +104,7 @@ transition: .3s;
   height: 200px;
 }
 
-@media only screen and (max-width: 767px){
+@media only screen and (max-width: 1000px){
   #overlay p {
     display: none;
   }
