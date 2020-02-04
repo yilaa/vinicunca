@@ -37,6 +37,7 @@
       Un viaje lleno de aromas, sabores y encuentro con los bosques y cataratas que rodean los cafetales.</p>
     <h2 id="tituloAtractivo"></h2>
     <p id="infoAtractivo"></p>
+    <p id="actividadesAtractivo"></p>
     <div class='slide-in__imagen'></div>
   </div>
 <div id='map'>
@@ -68,9 +69,9 @@ var estiloProvincia = {
 }
 var provinciasRDC = L.geoJson(provincias, {
  style: estiloProvincia,
- onEachFeature: function (feature,layer) {
-        layer.bindPopup('<strong>Provincia</strong>: ' + feature.properties.PROVINCIA + '<br/><strong>Departamento</strong>: '+ feature.properties.DEPARTAMEN);
- }
+//  onEachFeature: function (feature,layer) {
+//         layer.bindPopup('<strong>Provincia</strong>: ' + feature.properties.PROVINCIA + '<br/><strong>Departamento</strong>: '+ feature.properties.DEPARTAMEN);
+// }
 }).addTo(map);
 
 
@@ -134,10 +135,12 @@ var MapaRutaCafe = L.geoJson(mapardc, {
          }
     },
     onEachFeature: function (feature,layer) {
+      layer.bindPopup(feature.properties.name)
       layer.on('click', function(e){
         $('#slide-in').addClass('in');
         $('#tituloAtractivo').html(layer.feature.properties.name);
         $('#infoAtractivo').html(layer.feature.properties.resumen);
+        $('#actividadesAtractivo').html(layer.feature.properties.actividades + ' <a href='+'>Más info (pronto el link)</a');
         $('.slide-in__imagen').html('<img src='+layer.feature.properties.image+'>');
         var lat= feature.geometry.coordinates[1] - 0.01
         var long= feature.geometry.coordinates[0]
@@ -145,21 +148,13 @@ var MapaRutaCafe = L.geoJson(mapardc, {
               duration: 0.15
             });
         $('#select-location').val(layer.feature.properties.name);
-        switch (layer.feature.properties.descripcion) {
-          case 'finca': e.target.setIcon(cafeVerde)
-          break
-          case 'catarata': e.target.setIcon(aguaAzul)
-          break
-          case 'laguna': e.target.setICon(aguaAzul)
-          break
-        }
       })
     }         
 }).addTo(map)
 
 //Bounds
 map.fitBounds(provinciasRDC.getBounds(), {
-  padding: [1,1]
+  padding: [5,5]
 });
 
 // slide-in ocultar
@@ -169,8 +164,8 @@ $(document).on('click','.slide-in__boton',function() {
         map.fitBounds(provinciasRDC.getBounds(), {
         padding: [5,5]
         });
-      }
-      $('#select-location').val(0)
+      };
+      $('#select-location').val(0);
     });
 
 // selector de atractivos
@@ -184,25 +179,21 @@ $(document).on('change','#select-location',function(e) {
 			var atractivo = e.target.value;
 			if(atractivo!==0) {
 				MapaRutaCafe.eachLayer(function(layer) {
-         if(layer.feature.properties.name===e.target.value){ 
+         if(layer.feature.properties.name===e.target.value){
+            layer.bindPopup(layer.feature.properties.name).openPopup() 
             $('#slide-in').addClass('in');
             $('#tituloAtractivo').html(layer.feature.properties.name);
             $('#infoAtractivo').html(layer.feature.properties.resumen);
+            $('#actividadesAtractivo').html(layer.feature.properties.actividades + ' <a href='+'>Más info (pronto el link)</a');
             $('.slide-in__imagen').html('<img src='+layer.feature.properties.image+'>');
             var lat= layer.feature.geometry.coordinates[1] - 0.01
             var long= layer.feature.geometry.coordinates[0]
             map.flyTo([lat,long],14,{
               duration: 0.20
             });
-            switch (layer.feature.properties.descripcion) {
-            case 'finca': e.target.setIcon(cafeVerde)
-            break
-            case 'catarata': e.target.setIcon(aguaAzul)
-            break
-            case 'laguna': e.target.setICon(aguaAzul)
-            break
-        }
+            
           }
+        
         });
       }
     });
