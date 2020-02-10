@@ -37,7 +37,56 @@
       Un viaje lleno de aromas, sabores y encuentro con los bosques y cataratas que rodean los cafetales.</p>
     <h2 id="tituloAtractivo"></h2>
     <p id="infoAtractivo"></p>
-    <div class='slide-in__imagen'></div>
+    <p id="actividadesAtractivo"></p>
+    <section class="carousel" aria-label="Gallery">
+      <ol class="carousel__viewport">
+        <li id="carousel__slide1"
+            tabindex="0"
+            class="carousel__slide">
+          <div class="carousel__snapper">
+            <a href="#carousel__slide4"
+               class="carousel__prev">Go to last slide</a>
+            <a href="#carousel__slide2"
+               class="carousel__next">Go to next slide</a>
+          </div>
+        </li>
+        <li id="carousel__slide2"
+            tabindex="0"
+            class="carousel__slide">
+          <div class="carousel__snapper"></div>
+          <a href="#carousel__slide1"
+             class="carousel__prev">Go to previous slide</a>
+          <a href="#carousel__slide3"
+             class="carousel__next">Go to next slide</a>
+        </li>
+        <li id="carousel__slide3"
+            tabindex="0"
+            class="carousel__slide">
+          <div class="carousel__snapper"></div>
+          <a href="#carousel__slide2"
+             class="carousel__prev">Go to previous slide</a>
+          <a href="#carousel__slide4"
+             class="carousel__next">Go to next slide</a>
+        </li>
+      </ol>
+      <aside class="carousel__navigation">
+        <ol class="carousel__navigation-list">
+          <li class="carousel__navigation-item">
+            <a href="#carousel__slide1"
+               class="carousel__navigation-button">Go to slide 1</a>
+          </li>
+          <li class="carousel__navigation-item">
+            <a href="#carousel__slide2"
+               class="carousel__navigation-button">Go to slide 2</a>
+          </li>
+          <li class="carousel__navigation-item">
+            <a href="#carousel__slide3"
+               class="carousel__navigation-button">Go to slide 3</a>
+          </li>
+        </ol>
+      </aside>
+    </section>
+  </div>
   </div>
 <div id='map'>
 </div>
@@ -68,9 +117,9 @@ var estiloProvincia = {
 }
 var provinciasRDC = L.geoJson(provincias, {
  style: estiloProvincia,
- onEachFeature: function (feature,layer) {
-        layer.bindPopup('<strong>Provincia</strong>: ' + feature.properties.PROVINCIA + '<br/><strong>Departamento</strong>: '+ feature.properties.DEPARTAMEN);
- }
+//  onEachFeature: function (feature,layer) {
+//         layer.bindPopup('<strong>Provincia</strong>: ' + feature.properties.PROVINCIA + '<br/><strong>Departamento</strong>: '+ feature.properties.DEPARTAMEN);
+// }
 }).addTo(map);
 
 
@@ -80,14 +129,16 @@ var cafe = L.ExtraMarkers.icon({
     markerColor: 'white',
     iconColor: 'rgba(122,184,0)',
     shape: 'square',
-    prefix: 'fa'
+    prefix: 'fa',
+    popupAnchor: [0,49]
   });
 var agua = L.ExtraMarkers.icon({
     icon: 'fa-water',
     markerColor: 'white',
     iconColor: '#477AC2',
     shape: 'square',
-    prefix: 'fa'
+    prefix: 'fa',
+    popupAnchor: [0,49]
   });
 
 var punto = {
@@ -98,22 +149,6 @@ var punto = {
     opacity: 1,
     fillOpacity: 0.8
 };
-
-var cafeVerde = L.ExtraMarkers.icon({
-    icon: 'fa-coffee',
-    markerColor: 'green',
-    iconColor: 'white',
-    shape: 'square',
-    prefix: 'fa'
-});
-
-var aguaAzul = L.ExtraMarkers.icon({
-    icon: 'fa-water',
-    markerColor: 'blue',
-    iconColor: 'white',
-    shape: 'square',
-    prefix: 'fa'
-  });
 
 var MapaRutaCafe = L.geoJson(mapardc, {
   style: function(feature) {
@@ -134,25 +169,21 @@ var MapaRutaCafe = L.geoJson(mapardc, {
          }
     },
     onEachFeature: function (feature,layer) {
+      layer.bindPopup(feature.properties.name)
       layer.on('click', function(e){
         $('#slide-in').addClass('in');
         $('#tituloAtractivo').html(layer.feature.properties.name);
         $('#infoAtractivo').html(layer.feature.properties.resumen);
-        $('.slide-in__imagen').html('<img src='+layer.feature.properties.image+'>');
+        $('#actividadesAtractivo').html(layer.feature.properties.actividades + ' <a href='+'>Más info (pronto el link)</a');
+        $('#carousel__slide1').html('<img src='+layer.feature.properties.image+'>');
+        $('#carousel__slide2').html('<img src='+layer.feature.properties.image1+'>');
+        $('#carousel__slide3').html('<img src='+layer.feature.properties.image2+'>');
         var lat= feature.geometry.coordinates[1] - 0.01
         var long= feature.geometry.coordinates[0]
         map.flyTo([lat,long],14,{
               duration: 0.15
             });
         $('#select-location').val(layer.feature.properties.name);
-        switch (layer.feature.properties.descripcion) {
-          case 'finca': e.target.setIcon(cafeVerde)
-          break
-          case 'catarata': e.target.setIcon(aguaAzul)
-          break
-          case 'laguna': e.target.setICon(aguaAzul)
-          break
-        }
       })
     }         
 }).addTo(map)
@@ -169,8 +200,8 @@ $(document).on('click','.slide-in__boton',function() {
         map.fitBounds(provinciasRDC.getBounds(), {
         padding: [5,5]
         });
-      }
-      $('#select-location').val(0)
+      };
+      $('#select-location').val(0);
     });
 
 // selector de atractivos
@@ -184,25 +215,23 @@ $(document).on('change','#select-location',function(e) {
 			var atractivo = e.target.value;
 			if(atractivo!==0) {
 				MapaRutaCafe.eachLayer(function(layer) {
-         if(layer.feature.properties.name===e.target.value){ 
+         if(layer.feature.properties.name===e.target.value){
+            layer.bindPopup(layer.feature.properties.name).openPopup() 
             $('#slide-in').addClass('in');
             $('#tituloAtractivo').html(layer.feature.properties.name);
             $('#infoAtractivo').html(layer.feature.properties.resumen);
-            $('.slide-in__imagen').html('<img src='+layer.feature.properties.image+'>');
+            $('#actividadesAtractivo').html(layer.feature.properties.actividades + ' <a href='+'>Más info (pronto el link)</a');
+            $('#carousel__slide1').html('<img src='+layer.feature.properties.image+'>');
+            $('#carousel__slide2').html('<img src='+layer.feature.properties.image1+'>');
+            $('#carousel__slide3').html('<img src='+layer.feature.properties.image2+'>');
             var lat= layer.feature.geometry.coordinates[1] - 0.01
             var long= layer.feature.geometry.coordinates[0]
             map.flyTo([lat,long],14,{
               duration: 0.20
             });
-            switch (layer.feature.properties.descripcion) {
-            case 'finca': e.target.setIcon(cafeVerde)
-            break
-            case 'catarata': e.target.setIcon(aguaAzul)
-            break
-            case 'laguna': e.target.setICon(aguaAzul)
-            break
-        }
+            
           }
+        
         });
       }
     });
