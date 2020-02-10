@@ -100,9 +100,21 @@ transition: .3s;
   transform: rotate(180deg);
   position: relative;
   left: 50%;
-  top: -19px;
+  top: -53px;
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 8px;
+  color: #76381a;
 }
 
+.leaflet-container a.leaflet-popup-close-button{
+  font: 10px Tahoma, Verdana, sans-serif;
+  padding: 2px 2px 0px 0px; 
+}
+
+.leaflet-popup-content {
+  margin:11px 8px 5px 5px;
+}
 /* Carousel */
 
 @keyframes tonext {
@@ -308,6 +320,11 @@ ol, li {
   .slide-in__boton { 
     margin-right: 30px;
   }
+  
+  #tituloAtractivo {
+  font-size: large;
+  }
+
   #select-location {
   width: 150px;
   font-size: 10px;
