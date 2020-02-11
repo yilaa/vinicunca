@@ -15,7 +15,12 @@ html, body, #map {
   
 }
 
-#overlay img {
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.header img {
   background: rgba(255, 255, 255);
   border-radius: 10px;
   box-shadow: 1px 1px 1px 1px #76381a;
@@ -23,10 +28,11 @@ html, body, #map {
   display: block;
 }
 
-#overlay p {
-  background: rgba(255, 255, 255);
+.header p {
+  background: rgba(255, 255, 255,0.9);
   font-family: 'Bree Serif', serif;
   padding: 6px 8px;
+  margin: 10px;
   border-radius: 10px;
   color: #76381a;
 }
@@ -48,6 +54,7 @@ html, body, #map {
   position: absolute;
   width: 400px;
   height: 300px;
+  box-sizing: border-box;
 	z-index: 1000;
 	background: rgba(255, 255, 255);
   transition: 0.5s;
@@ -60,9 +67,12 @@ html, body, #map {
 #slide-in.in {
   margin-bottom: 0px;
 } 
-
-.invitacion {
-  display: none
+#slide-in::-webkit-scrollbar{
+  width: 5px;
+}
+#slide-in::-webkit-scrollbar-thumb {
+  background: #76381a;
+  border-radius: 5px;
 }
 
 .slide-in__boton { 
@@ -115,7 +125,7 @@ transition: .3s;
 .leaflet-popup-content {
   margin:11px 8px 5px 5px;
 }
-/* Carousel */
+Carousel */
 
 @keyframes tonext {
   75% {
@@ -165,12 +175,12 @@ transition: .3s;
 
 .carousel {
   box-sizing: border-box;
-  scrollbar-color: transparent transparent; /* thumb and track color */
+  scrollbar-color: transparent transparent; /* thumb and track color */ 
   scrollbar-width: 0px;
 }
 
 .carousel::-webkit-scrollbar {
-  width: 0;
+  display: none;
 }
 
 .carousel::-webkit-scrollbar-track {
@@ -293,38 +303,41 @@ ol, li {
   outline: 0;
 }
 
-/* .carousel::before, */
+.carousel::before,
 .carousel__prev {
   left: -1rem;
 }
 
-/* .carousel::after, */
+.carousel::after,
 .carousel__next {
   right: -1rem;
-}
+} 
 
 
 @media only screen and (max-width: 767px){
-  #overlay img {
+  .header img {
     width: 70px;
   }
-  
-  #overlay p {
-    display: none;
+  .header p {
+    font-size: x-small;
   }
-  
   #slide-in {
     width: 100%;
     left: 0;
-  }
-  .slide-in__boton { 
-    margin-right: 30px;
   }
   
   #tituloAtractivo {
   font-size: large;
   }
 
+  #infoAtractivo {
+    font-size: medium;
+    margin-bottom: 3px;
+  }
+  
+  #actividadesAtractivo {
+    font-size: small;
+  }
   #select-location {
   width: 150px;
   font-size: 10px;

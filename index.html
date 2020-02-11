@@ -24,17 +24,17 @@
 
 <body>
   <div id="overlay">
+    <div class='header'>
     <img src="img/logo.png" alt="logo ruta del café">
-    <p>Descubre cómo se produce un café de excelente calidad, <br/> y las cataratas y bosques que rodean los cafetales.</p>
+    <p>Viaja a Jaén y San Ignacio, para descubrir cómo se produce un café de excelente calidad,
+      y disfrutar de las cataratas y bosques que rodean los cafetales.</p>
+  </div>
     <select name="select-location" id="select-location">
       <option value="0">Selecciona uno</option>
     </select>
   </div>
   <div id=slide-in>
     <button class='slide-in__boton'>Ocultar</button>
-    <p class="invitacion">El café nos acompaña en la casa o en el trabajo, pero <strong>¿qué hay detrás de una taza de café?</strong> . <br/>
-      Viaja a Jaén y San Ignacio, para descubrir como se produce un café de excelente calidad. 
-      Un viaje lleno de aromas, sabores y encuentro con los bosques y cataratas que rodean los cafetales.</p>
     <h2 id="tituloAtractivo"></h2>
     <p id="infoAtractivo"></p>
     <p id="actividadesAtractivo"></p>
@@ -181,7 +181,7 @@ var MapaRutaCafe = L.geoJson(mapardc, {
         $('#carousel__slide3').html('<img src='+layer.feature.properties.image2+'>');
         var lat= feature.geometry.coordinates[1] - 0.01
         var long= feature.geometry.coordinates[0]
-        map.flyTo([lat,long],12,{
+        map.flyTo([lat,long],14,{
               duration: 0.15
             });
         $('#select-location').val(layer.feature.properties.name);
@@ -199,7 +199,7 @@ $(document).on('click','.slide-in__boton',function() {
 			if($('#slide-in').hasClass('in')) {
         $('#slide-in').removeClass('in');
         map.fitBounds(provinciasRDC.getBounds(), {
-        padding: [5,5]
+        padding: [2,2]
         });
       };
       $('#select-location').val(0);
