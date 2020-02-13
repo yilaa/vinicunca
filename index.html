@@ -25,7 +25,7 @@
 <body>
   <div id="overlay">
     <div class='header'>
-    <img src="img/logo.png" alt="logo ruta del café">
+    <h2>Ruta del Café Jaén - San Ignacio</h2>
     <p>Viaja a Jaén y San Ignacio, para descubrir cómo se produce un café de excelente calidad,
       y disfrutar de las cataratas y bosques que rodean los cafetales.</p>
   </div>
@@ -34,7 +34,7 @@
     </select>
   </div>
   <div id=slide-in>
-    <button class='slide-in__boton'>Ocultar</button>
+    <button class='slide-in__boton'>cerrar</button>
     <h2 id="tituloAtractivo"></h2>
     <p id="infoAtractivo"></p>
     <p id="actividadesAtractivo"></p>
@@ -171,7 +171,7 @@ var MapaRutaCafe = L.geoJson(mapardc, {
     },
     onEachFeature: function (feature,layer) {
       layer.bindPopup(feature.properties.name)
-      layer.on('click', function(e){
+      layer.on('click', function(){
         $('#slide-in').addClass('in');
         $('#tituloAtractivo').html(layer.feature.properties.name);
         $('#infoAtractivo').html(layer.feature.properties.resumen);
@@ -190,9 +190,7 @@ var MapaRutaCafe = L.geoJson(mapardc, {
 }).addTo(map)
 
 //Bounds
-map.fitBounds(provinciasRDC.getBounds(), {
-  padding: [2,2]
-});
+map.fitBounds(provinciasRDC.getBounds());
 
 // slide-in ocultar
 $(document).on('click','.slide-in__boton',function() {

@@ -10,30 +10,28 @@ html, body, #map {
 #overlay {
   position: absolute;
   z-index: 1000;
-  padding: 6px;
   margin: 10px;
-  
+  padding: 6px;
+  max-width: 400px;
 }
 
 .header {
-  display: flex;
-  align-items: center;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 10px;
+  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.65);
 }
 
-.header img {
-  background: rgba(255, 255, 255);
-  border-radius: 10px;
-  box-shadow: 1px 1px 1px 1px #76381a;
-  width: 110px;
-  display: block;
+.header h2 {
+  color: rgba(122,184,0);
+  font-family: 'Bree Serif', serif;
+  margin: 0px;
+  padding: 5px 8px;
 }
 
 .header p {
-  background: rgba(255, 255, 255,0.9);
   font-family: 'Bree Serif', serif;
-  padding: 6px 8px;
-  margin: 10px;
-  border-radius: 10px;
+  padding: 3px 8px 10px 8px;
+  margin: 0px;
   color: #76381a;
 }
 
@@ -53,15 +51,17 @@ html, body, #map {
   padding: 10px;
   position: absolute;
   width: 400px;
-  height: 300px;
+  height: 400px;
   box-sizing: border-box;
 	z-index: 1000;
 	background: rgba(255, 255, 255);
   transition: 0.5s;
   bottom: 0;
   left: 24px;
-  margin-bottom: -310px;
+  margin-bottom: -400px;
   overflow: scroll;
+  border-radius: 4px;
+  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.65)
 }
 
 #slide-in.in {
@@ -71,7 +71,7 @@ html, body, #map {
   width: 5px;
 }
 #slide-in::-webkit-scrollbar-thumb {
-  background: #76381a;
+  background: rgba(110, 50, 25);
   border-radius: 5px;
 }
 
@@ -315,14 +315,17 @@ ol, li {
 
 
 @media only screen and (max-width: 767px){
-  .header img {
-    width: 70px;
+
+  .header h2 {
+    font-size: large;
   }
   .header p {
     font-size: x-small;
   }
   #slide-in {
     width: 100%;
+    height: 300px;
+    margin-bottom: -300px;
     left: 0;
   }
   
@@ -341,5 +344,9 @@ ol, li {
   #select-location {
   width: 150px;
   font-size: 10px;
+  }
+  
+  .leaflet-control-zoom {
+    display: none;
   }
 }
