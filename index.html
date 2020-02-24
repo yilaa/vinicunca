@@ -11,7 +11,7 @@
 <meta property="og:site_name" content="yilaa" />
 <meta property="og:url" content="https://yilaa.github.io/rutacafejaen" />
 <meta property="og:description" content="Segunda versión de un mapa de ruta turística" />
-<meta property="og:image" content="img/portadafb.jpg" />
+<meta property="og:image" content="img/fotofb.jpg" />
 <link href="https://fonts.googleapis.com/css?family=Bree+Serif&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
@@ -65,7 +65,7 @@
     <li class="leyenda__item"><img src="img/sea.svg" alt="icono catarata" width="15px"> Catarata o laguna</li>
   </ul>
 </div>
-<!-- <a class="creditos" href="">Créditos</a> -->
+<a class="creditos" href="http://www.bitsviajeros.com" target="_blank">Diseñado por Bitsviajeros</a>
 <div id='map'>
 </div>
 <script>
@@ -80,11 +80,11 @@ map.createPane('labels');
 map.getPane('labels').style.pointerEvents = 'none';
 
 var CartoDB_VoyagerNoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> <a href="https://carto.com/attributions">CARTO</a>',
 }).addTo(map);
 
 var CartoDB_VoyagerOnlyLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', {
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> <a href="https://carto.com/attributions">CARTO</a>',
 	pane: 'labels'
 }).addTo(map);
 
@@ -188,7 +188,7 @@ var MapaRutaCafe = L.geoJson(mapardc, {
         $('#tituloAtractivo').html(layer.feature.properties.name);
         $('#infoAtractivo').html(layer.feature.properties.resumen);
         $('#actividadesAtractivo').html(layer.feature.properties.actividades + ' ');
-        $('#actividadesAtractivo').append('<a href=\'' + layer.feature.properties.link + '\'>'+ ' Más info' +'</a>');
+        $('#actividadesAtractivo').append('<a href=\'' + layer.feature.properties.link + '\' target=\'_blank\'>'+ ' Más info' +'</a>');
         $('#carousel__slide1').html('<img src='+layer.feature.properties.image+'>');
         $('#carousel__slide2').html('<img src='+layer.feature.properties.image1+'>');
         $('#carousel__slide3').html('<img src='+layer.feature.properties.image2+'>');
@@ -249,7 +249,7 @@ $(document).on('change','#select-location',function(e) {
             $('#tituloAtractivo').html(layer.feature.properties.name);
             $('#infoAtractivo').html(layer.feature.properties.resumen);
             $('#actividadesAtractivo').html(layer.feature.properties.actividades);
-            $('#actividadesAtractivo').append('<a href=\'' + layer.feature.properties.link + '\'>'+ ' Más info' +'</a>');
+            $('#actividadesAtractivo').append('<a href=\'' + layer.feature.properties.link + '\' target=\'_blank\'>'+ ' Más info' +'</a>');
             $('#carousel__slide1').html('<img src='+layer.feature.properties.image+'>');
             $('#carousel__slide2').html('<img src='+layer.feature.properties.image1+'>');
             $('#carousel__slide3').html('<img src='+layer.feature.properties.image2+'>');
