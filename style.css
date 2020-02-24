@@ -245,12 +245,13 @@ html, body, #map {
     font-size: large;
   }
   .header p {
-    font-size: x-small;
+    font-size: small;
   }
 
   #slide {
     padding: 0px;
     width: 100%;
+    left: -600px;
   }
   .slide-in {
     width: 100%;
@@ -273,7 +274,7 @@ html, body, #map {
   }
   
   #actividadesAtractivo {
-    font-size: small;
+    font-size: medium;
   }
   #select-location {
   width: 150px;
