@@ -10,102 +10,84 @@
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="yilaa" />
 <meta property="og:url" content="https://yilaa.github.io/rutacafejaen" />
-<meta property="og:description" content="Primera versión de un mapa interactivo" />
+<meta property="og:description" content="Segunda versión de un mapa de ruta turística" />
 <meta property="og:image" content="https://www.viajaporperu.com/wp-content/uploads/2020/02/mapafb.png" />
 <link href="https://fonts.googleapis.com/css?family=Bree+Serif&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
 <link rel="stylesheet" href="style.css" />
 
 
 <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
-<script src="https://kit.fontawesome.com/9c7499abbb.js" crossorigin="anonymous"></script>
-<link rel="stylesheet" href="css/leaflet.extra-markers.min.css">
-<script src="js/leaflet.extra-markers.min.js"></script>
 <script type="text/javascript" src="js/map-rdc.js"></script>
 <script type="text/javascript" src="js/provincias.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-
+<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 </head>
 
 <body>
   <div id="overlay">
     <div class='header'>
     <h2>Ruta del Café Jaén - San Ignacio</h2>
-    <p>Viaja a Jaén y San Ignacio, para descubrir cómo se produce un café de excelente calidad,
-      y disfrutar de las cataratas y bosques que rodean los cafetales.</p>
+    <p>Descubre cómo se produce café de excelente calidad,
+      y disfruta de las cataratas y bosques que rodean los cafetales.</p>
+      <p>4 Fincas, 3 cataratas y 1 laguna</p>
   </div>
+    <a href="index.html" class="home">Inicio</a>
     <select name="select-location" id="select-location">
       <option value="0">Selecciona uno</option>
     </select>
   </div>
-  <div id=slide-in>
-    <button class='slide-in__boton'>cerrar</button>
+  <div id='slide'>
+  <div class='slide-in'>
+    <a class='close'>x</a>
     <h2 id="tituloAtractivo"></h2>
     <p id="infoAtractivo"></p>
-    <p id="actividadesAtractivo"></p>
-    <section class="carousel" aria-label="Gallery">
-      <ol class="carousel__viewport">
-        <li id="carousel__slide1"
-            tabindex="0"
-            class="carousel__slide">
-          <div class="carousel__snapper">
-            <a href="#carousel__slide4"
-               class="carousel__prev">Go to last slide</a>
-            <a href="#carousel__slide2"
-               class="carousel__next">Go to next slide</a>
-          </div>
-        </li>
-        <li id="carousel__slide2"
-            tabindex="0"
-            class="carousel__slide">
-          <div class="carousel__snapper"></div>
-          <a href="#carousel__slide1"
-             class="carousel__prev">Go to previous slide</a>
-          <a href="#carousel__slide3"
-             class="carousel__next">Go to next slide</a>
-        </li>
-        <li id="carousel__slide3"
-            tabindex="0"
-            class="carousel__slide">
-          <div class="carousel__snapper"></div>
-          <a href="#carousel__slide2"
-             class="carousel__prev">Go to previous slide</a>
-          <a href="#carousel__slide4"
-             class="carousel__next">Go to next slide</a>
-        </li>
-      </ol>
-      <aside class="carousel__navigation">
-        <ol class="carousel__navigation-list">
-          <li class="carousel__navigation-item">
-            <a href="#carousel__slide1"
-               class="carousel__navigation-button">Go to slide 1</a>
-          </li>
-          <li class="carousel__navigation-item">
-            <a href="#carousel__slide2"
-               class="carousel__navigation-button">Go to slide 2</a>
-          </li>
-          <li class="carousel__navigation-item">
-            <a href="#carousel__slide3"
-               class="carousel__navigation-button">Go to slide 3</a>
-          </li>
-        </ol>
-      </aside>
+    <p id="actividadesAtractivo"><a href="">Más info</a></p>
+    <section class="carousel">
+      <div class="carousel__container">
+        <div id="carousel__slide1" class="carousel-item">
+        </div>
+        <div id="carousel__slide2" class="carousel-item">
+        </div>
+        <div id="carousel__slide3" class="carousel-item">
+        </div>
+      </div>
     </section>
   </div>
-  </div>
+</div>
+<div class="leyenda">
+  <!-- <h4 class="leyenda__titulo">Leyenda</h4> -->
+  <ul>
+    <li class="leyenda__item"> <div class= "circulo"></div> Número de atractivos</li>
+    <li class="leyenda__item"><img src="img/coffee-beans.svg" alt="icono finca" width="15px"> Finca de café</li>
+    <li class="leyenda__item"><img src="img/sea.svg" alt="icono catarata" width="15px"> Catarata o laguna</li>
+  </ul>
+</div>
+<!-- <a class="creditos" href="">Créditos</a> -->
 <div id='map'>
 </div>
-
 <script>
 var map = L.map('map', {
     //center: new L.LatLng(-5.443126, -78.833394),
     //zoom: 10,
-    zoomControl: false
+    zoomControl: false,
+    closePopupOnClick: false
 });
+map.createPane('labels');
+// map.getPane('labels').style.zIndex = 500;
+map.getPane('labels').style.pointerEvents = 'none';
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-			attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-		}).addTo(map);
+var CartoDB_VoyagerNoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+}).addTo(map);
+
+var CartoDB_VoyagerOnlyLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	pane: 'labels'
+}).addTo(map);
+
 
 // Zoom controls
 L.control.zoom({
@@ -122,88 +104,130 @@ var estiloProvincia = {
 }
 var provinciasRDC = L.geoJson(provincias, {
  style: estiloProvincia,
-//  onEachFeature: function (feature,layer) {
-//         layer.bindPopup('<strong>Provincia</strong>: ' + feature.properties.PROVINCIA + '<br/><strong>Departamento</strong>: '+ feature.properties.DEPARTAMEN);
-// }
+ onEachFeature: function (feature,layer) {
+        layer.bindTooltip('Provincia: ' + feature.properties.PROVINCIA + '<br/>'+ feature.properties.DEPARTAMEN,{
+         permanent: true,
+         direction: 'bottom',
+         className: 'provinciaTooltip',
+        })
+}
 }).addTo(map);
 
-
-// Marcadores ruta cafe
-var cafe = L.ExtraMarkers.icon({
-    icon: 'fa-coffee',
-    markerColor: 'white',
-    iconColor: 'rgba(122,184,0)',
-    shape: 'square',
-    prefix: 'fa',
-    popupAnchor: [0,69]
-  });
-var agua = L.ExtraMarkers.icon({
-    icon: 'fa-water',
-    markerColor: 'white',
-    iconColor: '#477AC2',
-    shape: 'square',
-    prefix: 'fa',
-    popupAnchor: [0,69]
-  });
-
+//Carreteras ruta cafe
 var punto = {
-    radius: 4,
+    radius: 2,
     fillColor: "#ff7800",
-    color: "#76381a",
+    color: "#ff7800",
     weight: 1,
     opacity: 1,
     fillOpacity: 0.8,
-    popupAnchor: [0,69]
 };
 
-var MapaRutaCafe = L.geoJson(mapardc, {
+var PistasRutaCafe = L.geoJson(mapardc, {
+  filter: function(feature, layer) {
+      if (feature.properties.descripcion === 'ruta' || feature.properties.descripcion === 'lugar')
+        return true;
+    },
   style: function(feature) {
-        switch (feature.properties.descripcion) {
-          case 'ruta': return {color: "#76381a"}; break
+      switch (feature.properties.descripcion) {
+        case 'ruta': return {color: "rgba(255,255,255,0.8"}; 
         }
     },
   pointToLayer: function (feature, latlng) {
     switch(feature.properties.descripcion) {
-        case 'finca': return L.marker(latlng, {icon: cafe})
+    case 'lugar':  return L.circleMarker(latlng, punto).bindTooltip(feature.properties.name)}
+    }
+}).addTo(map);
+
+
+// Marcadores ruta cafe
+var fincaIcon = L.icon({
+  iconUrl: 'img/coffee-beans.svg',
+  iconSize: [38,38],
+  iconAnchor: [19,19],
+  popupAnchor: [-70,9]
+})
+
+var catIcon = L.icon({
+  iconUrl: 'img/cascada.svg',
+  iconSize: [38,28],
+})
+
+var lagunaIcon = L.icon({
+  iconUrl: 'img/sea.svg',
+  iconSize: [38,38],
+  iconAnchor: [19,19],
+})
+
+var MapaRutaCafe = L.geoJson(mapardc, {
+  filter: function(feature, layer) {
+      if (feature.properties.descripcion === 'catarata' || feature.properties.descripcion === 'finca' || feature.properties.descripcion ==='laguna')
+        return true;
+    },     
+  pointToLayer: function (feature, latlng) {
+    switch(feature.properties.descripcion) {
+        case 'finca': return L.marker(latlng, {icon: fincaIcon}).bindPopup(feature.properties.name, {
+          autoClose:false,
+        })
         break
-        case 'catarata': return L.marker(latlng, {icon: agua})
+        case 'catarata': return L.marker(latlng, {icon: lagunaIcon}).bindPopup(feature.properties.name, {
+          autoClose:false
+        })
         break
-        case 'laguna': return L.marker(latlng, {icon: agua})
-        break
-        case 'lugar':  return L.circleMarker(latlng, punto)
-        break         
-         }
+        case 'laguna': return L.marker(latlng, {icon: lagunaIcon}).bindPopup(feature.properties.name, {
+          autoClose:false
+        })
+        break      
+        }
     },
     onEachFeature: function (feature,layer) {
-      layer.bindPopup(feature.properties.name)
       layer.on('click', function(){
-        $('#slide-in').addClass('in');
+        layer.openPopup()
+        $('#slide').addClass('in');
+        // sidebar.toggle();
         $('#tituloAtractivo').html(layer.feature.properties.name);
         $('#infoAtractivo').html(layer.feature.properties.resumen);
-        $('#actividadesAtractivo').html(layer.feature.properties.actividades + ' <a href='+'>Más info (pronto el link)</a');
+        $('#actividadesAtractivo').html(layer.feature.properties.actividades + ' ');
+        $('#actividadesAtractivo').append('<a href=\'' + layer.feature.properties.link + '\'>'+ ' Más info' +'</a>');
         $('#carousel__slide1').html('<img src='+layer.feature.properties.image+'>');
         $('#carousel__slide2').html('<img src='+layer.feature.properties.image1+'>');
         $('#carousel__slide3').html('<img src='+layer.feature.properties.image2+'>');
-        var lat= feature.geometry.coordinates[1] - 0.01
+        var lat= feature.geometry.coordinates[1]
         var long= feature.geometry.coordinates[0]
-        map.flyTo([lat,long],14,{
+        map.flyTo([lat,long],16,{
               duration: 0.15
             });
         $('#select-location').val(layer.feature.properties.name);
       })
-    }         
-}).addTo(map)
+    }    
+ })
+
+// clustering
+
+var markers = L.markerClusterGroup({
+  disableClusteringAtZoom: 16,
+  spiderfyOnMaxZoom: false,
+  showCoverageOnHover: false,
+  });
+markers.addLayer(MapaRutaCafe);
+map.addLayer(markers);
+map.on('layeradd', function(event) {
+  var layer = event.layer;
+  if (layer instanceof L.Marker && !(layer instanceof L.MarkerCluster)) {
+    layer.openPopup();
+  }
+});
 
 //Bounds
 map.fitBounds(provinciasRDC.getBounds());
 
 // slide-in ocultar
-$(document).on('click','.slide-in__boton',function() {
-			if($('#slide-in').hasClass('in')) {
-        $('#slide-in').removeClass('in');
-        map.fitBounds(provinciasRDC.getBounds(), {
-        padding: [2,2]
-        });
+$(document).on('click','.close',function() {
+			if($('#slide').hasClass('in')) {
+        $('#slide').removeClass('in');
+        // map.fitBounds(provinciasRDC.getBounds(), {
+        // padding: [2,2]
+        // });
       };
       $('#select-location').val(0);
     });
@@ -221,16 +245,17 @@ $(document).on('change','#select-location',function(e) {
 				MapaRutaCafe.eachLayer(function(layer) {
          if(layer.feature.properties.name===e.target.value){
             layer.bindPopup(layer.feature.properties.name).openPopup() 
-            $('#slide-in').addClass('in');
+            $('#slide').addClass('in');
             $('#tituloAtractivo').html(layer.feature.properties.name);
             $('#infoAtractivo').html(layer.feature.properties.resumen);
-            $('#actividadesAtractivo').html(layer.feature.properties.actividades + ' <a href='+'>Más info (pronto el link)</a');
+            $('#actividadesAtractivo').html(layer.feature.properties.actividades);
+            $('#actividadesAtractivo').append('<a href=\'' + layer.feature.properties.link + '\'>'+ ' Más info' +'</a>');
             $('#carousel__slide1').html('<img src='+layer.feature.properties.image+'>');
             $('#carousel__slide2').html('<img src='+layer.feature.properties.image1+'>');
             $('#carousel__slide3').html('<img src='+layer.feature.properties.image2+'>');
-            var lat= layer.feature.geometry.coordinates[1] - 0.01
+            var lat= layer.feature.geometry.coordinates[1]
             var long= layer.feature.geometry.coordinates[0]
-            map.flyTo([lat,long],14,{
+            map.flyTo([lat,long],16,{
               duration: 0.20
             });
             
