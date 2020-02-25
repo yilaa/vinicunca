@@ -10,8 +10,8 @@
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="yilaa" />
 <meta property="og:url" content="https://yilaa.github.io/rutacafejaen" />
-<meta property="og:description" content="Segunda versión de un mapa de ruta turística" />
-<meta property="og:image" content="img/fotofb.jpg" />
+<meta property="og:description" content="Segunda versión de un mapa interactivo." />
+<meta property="og:video" content="img/videomapa.mp4" />
 <link href="https://fonts.googleapis.com/css?family=Bree+Serif&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
@@ -148,11 +148,6 @@ var fincaIcon = L.icon({
   popupAnchor: [-70,9]
 })
 
-var catIcon = L.icon({
-  iconUrl: 'img/cascada.svg',
-  iconSize: [38,28],
-})
-
 var lagunaIcon = L.icon({
   iconUrl: 'img/sea.svg',
   iconSize: [38,38],
@@ -184,7 +179,6 @@ var MapaRutaCafe = L.geoJson(mapardc, {
       layer.on('click', function(){
         layer.openPopup()
         $('#slide').addClass('in');
-        // sidebar.toggle();
         $('#tituloAtractivo').html(layer.feature.properties.name);
         $('#infoAtractivo').html(layer.feature.properties.resumen);
         $('#actividadesAtractivo').html(layer.feature.properties.actividades + ' ');
@@ -225,9 +219,6 @@ map.fitBounds(provinciasRDC.getBounds());
 $(document).on('click','.close',function() {
 			if($('#slide').hasClass('in')) {
         $('#slide').removeClass('in');
-        // map.fitBounds(provinciasRDC.getBounds(), {
-        // padding: [2,2]
-        // });
       };
       $('#select-location').val(0);
     });
@@ -258,7 +249,6 @@ $(document).on('change','#select-location',function(e) {
             map.flyTo([lat,long],16,{
               duration: 0.20
             });
-            
           }
         
         });
