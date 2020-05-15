@@ -22,7 +22,7 @@ html, body, #map {
 }
 
 .header h2 {
-  color: rgba(122,184,0);
+  color: #32a663;
   font-family: 'Bree Serif', serif;
   margin: 0px;
   padding: 5px 8px;
@@ -32,13 +32,13 @@ html, body, #map {
   font-family: 'Bree Serif', serif;
   padding: 3px 8px;
   margin: 0px;
-  color: #76381a;
+  color: #e69522;
 }
 .home{ 
   cursor: pointer;
   border-radius: 5px;
   padding: 3px;
-  color: #76381a;
+  color: #e69522;
   font-weight: bold;
   text-decoration: none;
   font-size: 11px;
@@ -48,81 +48,24 @@ html, body, #map {
   box-shadow: 0 1px 7px rgba(0, 0, 0, 0.35);
   font-family: Arial, Helvetica, sans-serif;
 }
-#select-location {
-  outline: none;
-  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.65);
-  background-color: white;
-  border-radius: 5px;
-  margin-top: 5px;
-  width: 250px;
-  font-size: 11px;
-  padding: 2px;
-  color: #76381a;
+
+.leaflet-left .leaflet-control {
+  margin-left: 20px;
 }
 
-#slide {
-  position: absolute;
-  height: 100%;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 10px;
-  z-index: 3000;
-  left: -500px;
-  transition: left 0.5s, width 0.5s;
-  padding-right: 0;
-  width: 500px;
-
+.leaflet-top .leaflet-control {
+  margin-top: 20px;
 }
-.slide-in {
-  height: 100%;
-  width: 100%;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  padding: 8px 24px;
-  font-size: 1.1em;
-  background: white;
-  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.65);
-  -webkit-border-radius: 4px;
-  border-radius: 4px; 
+.leaflet-control-layers-expanded {
+  background: rgba(255, 255, 255, 0.90);
 }
 
-#slide.in {
-  left: 0px;
-  /* margin-bottom: 0px; */
-} 
 
-.slide-in .close { 
-  position: absolute;
-  right: 20px;
-  top: 20px;
-  width: 31px;
-  height: 31px;
-  color: #333;
-  font-size: 25px;
-  line-height: 1em;
-  text-align: center;
-  background: white;
-  -webkit-border-radius: 16px;
-  border-radius: 16px;
-  cursor: pointer;
-  z-index: 8;
-  font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+input[type="checkbox"] {
+    background: red;
 }
-
-#tituloAtractivo {
-  font-family: 'Bree Serif', serif;
-  color: #76381a;
-  font-weight: bold;
-  margin-top: 8px;
-  margin-bottom: 0px;
-}
-#infoAtractivo {
-  color: rgba(122,184,0);
-  margin-top: 0px;
+label input[type="checkbox"]:checked {
+      background: red;
 }
 
 .leaflet-popup-tip-container {
@@ -134,80 +77,18 @@ html, body, #map {
 }
 .leaflet-popup-content-wrapper {
   border-radius: 8px;
-  color: #76381a;
+  color: #000000;
   background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 0 1px 7px rgba(0, 0, 0, 0.65);
 }
 
 .leaflet-container a.leaflet-popup-close-button{
   font: 10px Tahoma, Verdana, sans-serif;
-  padding: 0px; 
+  /* padding: 10px;  */
 }
 
 .leaflet-popup-content {
-  margin:4px 10px 1px 4px;
-}
-/* Carrousel */
-.carousel {
-  overflow: scroll;
-  padding: 0px;
-  position: relative;
-  width: 100%;
-}
-.carousel__container {
-  white-space: nowrap;
-  margin: 0px 0px;
-  padding-bottom: 10px;
-}
-.carousel-item {
-  display: inline-block;
-  width: 400px;
-  height: 400px;
-  border-radius: 20px;
-  overflow: hidden;
-  margin-right: 10px;
-  transition: 450ms all;
-  transform-origin: center left;
-  position: relative;
-}
-.carousel-item img {
-  width: 400px;
-  height: 400px;
-  object-fit: cover;
-}
-
-.leyenda {
-  position: absolute;
-  z-index: 2000;
-  bottom: 16px;
-  margin: 0;
-  left: 10px;
-  font-family: Tahoma;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 5px;
-  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.65);
-  padding: 5px;
-}
-
-.leyenda ul {
-  list-style: none;
-  padding: 5px 0px 5px 0px;
-  margin: 0px;
-}
-.leyenda__item {
-  font-size: small;
-}
-.circulo {
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  background: rgba(110, 204, 57, 0.9);
-  display: inline-block;
-}
-
-.leyenda a {
-  text-decoration: none;
-  font-size: small;
+  margin:8px 15px 1px 5px
 }
 
 .creditos {
@@ -224,21 +105,6 @@ html, body, #map {
   color: #333
 }
 
-.provinciaTooltip {
-  margin-top: 29px;
-  margin-left: -50px;
-  background-color: transparent;
-  font-size: x-small;
-  font-family: Tahoma;
-  border: none;
-  box-shadow: none;
-  color: #76381a;
-}
-
-.leaflet-tooltip-bottom:before {
-  border: none;
-}
-
 @media only screen and (max-width: 767px){
 
   .header h2 {
@@ -248,43 +114,7 @@ html, body, #map {
     font-size: small;
   }
 
-  #slide {
-    padding: 0px;
-    width: 100%;
-    left: -800px;
-  }
-  .slide-in {
-    width: 100%;
-    padding: 10; 
-  }
-  
-  .carousel-item {
-    width: 100%;
-  }
-  .carousel-item img {
-    width: 100%;
-  }
-  #tituloAtractivo {
-  font-size: large;
-  }
-
-  #infoAtractivo {
-    font-size: medium;
-    margin-bottom: 3px;
-  }
-  
-  #actividadesAtractivo {
-    font-size: medium;
-  }
-  #select-location {
-  width: 150px;
-  font-size: 10px;
-  }
-  
   .leaflet-control-zoom {
     display: none;
-  }
-  .leyenda__item {
-    font-size: x-small;
   }
 }

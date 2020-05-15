@@ -3,14 +3,14 @@
 <html>
 
 <head>
-<title>Mapa Ruta del Café</title>
+<title>Mapa Vinicunca</title>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<meta property="og:title" content="Mapa Ruta del Café Jaén San Ignacio " />
+<meta property="og:title" content="Mapa Vinicunca " />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="yilaa" />
 <meta property="og:url" content="https://yilaa.github.io/rutacafejaen" />
-<meta property="og:description" content="Segunda versión de un mapa interactivo." />
+<meta property="og:description" content="Mapa Vinicunca." />
 <meta property="og:image" content="https://yilaa.github.io/rutacafejaen/img/mapafb.jpg" />
 <link href="https://fonts.googleapis.com/css?family=Bree+Serif&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
@@ -20,60 +20,35 @@
 
 
 <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
-<script type="text/javascript" src="js/map-rdc.js"></script>
-<script type="text/javascript" src="js/provincias.js"></script>
+<script type="text/javascript" src="js/vias.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
 </head>
 
 <body>
-  <div id="overlay">
+  <!-- <div id="overlay">
     <div class='header'>
-    <h2>Ruta del Café Jaén - San Ignacio</h2>
-    <p>Descubre cómo se produce café de excelente calidad,
-      y disfruta de las cataratas y bosques que rodean los cafetales.</p>
-      <p>4 Fincas, 3 cataratas y 1 laguna</p>
+    <h2>Vinicunca</h2>
+    <p>Descubre más allá de la Montaña Arcoiris.</p>
   </div>
     <a href="index.html" class="home">Inicio</a>
-    <select name="select-location" id="select-location">
-      <option value="0">Selecciona uno</option>
-    </select>
-  </div>
-  <div id='slide'>
-  <div class='slide-in'>
-    <a class='close'>x</a>
-    <h2 id="tituloAtractivo"></h2>
-    <p id="infoAtractivo"></p>
-    <p id="actividadesAtractivo"><a href="">Más info</a></p>
-    <section class="carousel">
-      <div class="carousel__container">
-        <div id="carousel__slide1" class="carousel-item">
-        </div>
-        <div id="carousel__slide2" class="carousel-item">
-        </div>
-        <div id="carousel__slide3" class="carousel-item">
-        </div>
-      </div>
-    </section>
-  </div>
-</div>
-<div class="leyenda">
-  <!-- <h4 class="leyenda__titulo">Leyenda</h4> -->
-  <ul>
-    <li class="leyenda__item"> <div class= "circulo"></div> Número de atractivos</li>
-    <li class="leyenda__item"><img src="img/coffee-beans.svg" alt="icono finca" width="15px"> Finca de café</li>
-    <li class="leyenda__item"><img src="img/sea.svg" alt="icono catarata" width="15px"> Catarata o laguna</li>
-  </ul>
-</div>
-<a class="creditos" href="http://www.bitsviajeros.com" target="_blank">Diseñado por Bitsviajeros</a>
+  </div> -->
+<a class="creditos" href="http://www.turismotec.org" target="_blank">Diseñado por TurismoTec.org</a>
 <div id='map'>
 </div>
 <script>
+
+let Pueblos = new L.featureGroup()
+let Trekking = new L.featureGroup()
+let Arqueologia = new L.featureGroup()
+let Escalada = new L.featureGroup()
+let Montana = new L.featureGroup()
+
 var map = L.map('map', {
-    //center: new L.LatLng(-5.443126, -78.833394),
     //zoom: 10,
     zoomControl: false,
-    closePopupOnClick: false
+    closePopupOnClick: false,
+    layers: [Montana, Pueblos, Arqueologia, Escalada, Trekking]
 });
 map.createPane('labels');
 // map.getPane('labels').style.zIndex = 500;
@@ -95,167 +70,154 @@ L.control.zoom({
 }).addTo(map);
 
 
-//geojson provincias
+//Mostrar la ruta
 
-var estiloProvincia = {
-  'color': 'rgba(122,184,0)',
-  'weight': 2
-  //'opacity': 1
-}
-var provinciasRDC = L.geoJson(provincias, {
- style: estiloProvincia,
- onEachFeature: function (feature,layer) {
-        layer.bindTooltip('Provincia: ' + feature.properties.PROVINCIA + '<br/>'+ feature.properties.DEPARTAMEN,{
-         permanent: true,
-         direction: 'bottom',
-         className: 'provinciaTooltip',
-        })
-}
-}).addTo(map);
-
-//Carreteras ruta cafe
-var punto = {
-    radius: 2,
-    fillColor: "#ff7800",
-    color: "#ff7800",
-    weight: 1,
-    opacity: 1,
-    fillOpacity: 0.8,
-};
-
-var PistasRutaCafe = L.geoJson(mapardc, {
+var Pistas = L.geoJson(mapavias, {
   filter: function(feature, layer) {
-      if (feature.properties.descripcion === 'ruta' || feature.properties.descripcion === 'lugar')
+      if (feature.geometry.type === 'LineString')
         return true;
     },
   style: function(feature) {
-      switch (feature.properties.descripcion) {
-        case 'ruta': return {color: "rgba(255,255,255,0.8"}; 
-        }
+      return {color: "#32a663"}; 
     },
-  pointToLayer: function (feature, latlng) {
-    switch(feature.properties.descripcion) {
-    case 'lugar':  return L.circleMarker(latlng, punto).bindTooltip(feature.properties.name)}
-    }
+  // pointToLayer: function (feature, latlng) {
+  //   return L.circleMarker(latlng, punto).bindTooltip(feature.properties.name)
+  //   }
 }).addTo(map);
 
+// iconos
 
-// Marcadores ruta cafe
-var fincaIcon = L.icon({
-  iconUrl: 'img/coffee-beans.svg',
-  iconSize: [38,38],
-  iconAnchor: [19,19],
-  popupAnchor: [-70,9]
+var montanaIcon = L.icon({
+  iconUrl: 'img/nature.svg',
+  iconSize: [30,30],
+  iconAnchor: [15,15],
+  //popupAnchor: [-35,9]
 })
 
-var lagunaIcon = L.icon({
-  iconUrl: 'img/sea.svg',
-  iconSize: [38,38],
-  iconAnchor: [19,19],
+var puebloIcon = L.icon({
+  iconUrl: 'img/house.svg',
+  iconSize: [20,20],
+  iconAnchor: [10,10],
+  popupAnchor: [-30,2]
 })
 
-var MapaRutaCafe = L.geoJson(mapardc, {
-  filter: function(feature, layer) {
-      if (feature.properties.descripcion === 'catarata' || feature.properties.descripcion === 'finca' || feature.properties.descripcion ==='laguna')
-        return true;
-    },     
-  pointToLayer: function (feature, latlng) {
-    switch(feature.properties.descripcion) {
-        case 'finca': return L.marker(latlng, {icon: fincaIcon}).bindPopup(feature.properties.name, {
-          autoClose:false,
-        })
-        break
-        case 'catarata': return L.marker(latlng, {icon: lagunaIcon}).bindPopup(feature.properties.name, {
-          autoClose:false
-        })
-        break
-        case 'laguna': return L.marker(latlng, {icon: lagunaIcon}).bindPopup(feature.properties.name, {
-          autoClose:false
-        })
-        break      
-        }
-    },
-    onEachFeature: function (feature,layer) {
-      layer.on('click', function(){
-        layer.openPopup()
-        $('#slide').addClass('in');
-        $('#tituloAtractivo').html(layer.feature.properties.name);
-        $('#infoAtractivo').html(layer.feature.properties.resumen);
-        $('#actividadesAtractivo').html(layer.feature.properties.actividades + ' ');
-        $('#actividadesAtractivo').append('<a href=\'' + layer.feature.properties.link + '\' target=\'_blank\'>'+ ' Más info' +'</a>');
-        $('#carousel__slide1').html('<img src='+layer.feature.properties.image+'>');
-        $('#carousel__slide2').html('<img src='+layer.feature.properties.image1+'>');
-        $('#carousel__slide3').html('<img src='+layer.feature.properties.image2+'>');
-        var lat= feature.geometry.coordinates[1]
-        var long= feature.geometry.coordinates[0]
-        map.flyTo([lat,long],16,{
-              duration: 0.15
-            });
-        $('#select-location').val(layer.feature.properties.name);
-      })
-    }    
- })
+var monumentIcon = L.icon({
+  iconUrl: 'img/monument.svg',
+  iconSize: [24,24],
+  iconAnchor: [12,12],
+  //popupAnchor: [9,9]
+})
 
-// clustering
+var trekIcon = L.icon({
+  iconUrl: 'img/people.svg',
+  iconSize: [23,23],
+  iconAnchor: [11.5,11.5],
+  //popupAnchor: [-70,9]
+})
 
-var markers = L.markerClusterGroup({
-  disableClusteringAtZoom: 16,
-  spiderfyOnMaxZoom: false,
-  showCoverageOnHover: false,
-  });
-markers.addLayer(MapaRutaCafe);
-map.addLayer(markers);
-map.on('layeradd', function(event) {
-  var layer = event.layer;
-  if (layer instanceof L.Marker && !(layer instanceof L.MarkerCluster)) {
-    layer.openPopup();
-  }
-});
+var escaladaIcon = L.icon({
+  iconUrl: 'img/escalada.svg',
+  iconSize: [23,23],
+  iconAnchor: [11.5,11.5],
+  //popupAnchor: [-70,9]
+})
+
+
+
+// Obtener datos del csv y agregarlos al mapa
+
+function Lugar (lugar, tipo, descripcion, lon, lat) {
+  this.lugar = lugar
+  this.tipo = tipo
+  this.descripcion= descripcion
+  this.lon= lon
+  this.lat= lat
+}
+
+async function getData() {
+  const response= await fetch('js/LugaresVinicunca.csv')
+  const data = await response.text()
+  const table = data.split('\n').slice(1)
+  table.forEach(row => {
+    const columns = row.split(',')
+    const lugar = columns[0]
+    const tipo = columns[1]
+    const descripcion = columns[2]
+    const lon = parseFloat(columns[3])
+    const lat = parseFloat(columns[4])
+    nuevoLugar = new Lugar(lugar, tipo, descripcion,lon,lat)
+    var popup = L.popup()
+    .setContent(nuevoLugar.lugar + '<br/>' + nuevoLugar.descripcion)
+    switch (nuevoLugar.tipo) {
+      case 'pueblo': return L.marker([nuevoLugar.lat,nuevoLugar.lon],{icon: puebloIcon})
+      .addTo(Pueblos).addTo(map).bindPopup(popup)
+      break
+      case 'montaña': return L.marker([nuevoLugar.lat,nuevoLugar.lon],{icon:montanaIcon})
+      .addTo(Montana).addTo(map).bindPopup(popup)
+      break
+      case 'arqueologia': return L.marker([nuevoLugar.lat,nuevoLugar.lon],{icon: monumentIcon})
+      .addTo(Arqueologia).addTo(map).bindPopup(popup)
+      break 
+      case 'caminata': return L.marker([nuevoLugar.lat,nuevoLugar.lon],{icon: trekIcon})
+      .addTo(Trekking).addTo(map).bindPopup(popup)
+      break
+      case 'escalada': return L.marker([nuevoLugar.lat,nuevoLugar.lon],{icon: escaladaIcon})
+      .addTo(Escalada).addTo(map).bindPopup(popup)
+      break
+    }
+    agregar()
+    
+  })
+}
+
+var lugares = []
+function agregar() {
+  lugares.push(nuevoLugar)
+}
+
+getData()
+// Menú de opciones
+
+var overlays= {
+  "Pueblos": Pueblos,
+  "Montañas": Montana,
+  "Arqueología": Arqueologia,
+  "Trekking": Trekking,
+  "Escalada": Escalada
+}
+
+L.control.layers(null, overlays, {
+  collapsed: false,
+  position: 'topleft',
+  }).addTo(map);
+
+// Al click de un ícono
+
+Pueblos.on('click', function (e) { 
+  map.flyTo([e.latlng.lat,e.latlng.lng],13,{
+              duration: 0.15})
+})
+Montana.on('click', function (e) { 
+  map.flyTo([e.latlng.lat,e.latlng.lng],13,{
+              duration: 0.15})
+})
+Trekking.on('click', function (e) { 
+  map.flyTo([e.latlng.lat,e.latlng.lng],13,{
+              duration: 0.15})
+})
+Escalada.on('click', function (e) { 
+  map.flyTo([e.latlng.lat,e.latlng.lng],13,{
+              duration: 0.15})
+})
+Arqueologia.on('click', function (e) { 
+  map.flyTo([e.latlng.lat,e.latlng.lng],13,{
+              duration: 0.15})
+})
+
 
 //Bounds
-map.fitBounds(provinciasRDC.getBounds());
-
-// slide-in ocultar
-$(document).on('click','.close',function() {
-			if($('#slide').hasClass('in')) {
-        $('#slide').removeClass('in');
-      };
-      $('#select-location').val(0);
-    });
-
-// selector de atractivos
-mapardc.features.forEach(function(feature) {
-    if (feature.properties.descripcion === 'catarata' || feature.properties.descripcion === 'finca' || feature.properties.descripcion ==='laguna' ){
-        $('#select-location').append('<option value="'+feature.properties.name+'">'+feature.properties.name+'</option>');
-        }	
-});
-
-$(document).on('change','#select-location',function(e) {
-			var atractivo = e.target.value;
-			if(atractivo!==0) {
-				MapaRutaCafe.eachLayer(function(layer) {
-         if(layer.feature.properties.name===e.target.value){
-            layer.bindPopup(layer.feature.properties.name).openPopup() 
-            $('#slide').addClass('in');
-            $('#tituloAtractivo').html(layer.feature.properties.name);
-            $('#infoAtractivo').html(layer.feature.properties.resumen);
-            $('#actividadesAtractivo').html(layer.feature.properties.actividades);
-            $('#actividadesAtractivo').append('<a href=\'' + layer.feature.properties.link + '\' target=\'_blank\'>'+ ' Más info' +'</a>');
-            $('#carousel__slide1').html('<img src='+layer.feature.properties.image+'>');
-            $('#carousel__slide2').html('<img src='+layer.feature.properties.image1+'>');
-            $('#carousel__slide3').html('<img src='+layer.feature.properties.image2+'>');
-            var lat= layer.feature.geometry.coordinates[1]
-            var long= layer.feature.geometry.coordinates[0]
-            map.flyTo([lat,long],16,{
-              duration: 0.20
-            });
-          }
-        
-        });
-      }
-    });
+map.fitBounds(Pistas.getBounds());
     
-
 </script>
 
 
