@@ -16,27 +16,31 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
 <link rel="stylesheet" href="style.css" />
 
-
 <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
-<script type="text/javascript" src="js/vias.js"></script>
+<script type="text/javascript" src="js/pistas.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
+<script src="js/animation.js"></script>
 </head>
 
 <body>
-  <!-- <div id="overlay">
-    <div class='header'>
-    <h2>Vinicunca</h2>
-    <p>Descubre más allá de la Montaña Arcoiris.</p>
-  </div>
-    <a href="index.html" class="home">Inicio</a>
-  </div> -->
 <a class="creditos" href="http://www.turismotec.org" target="_blank">Diseñado por TurismoTec.org</a>
 <div id='map'>
 </div>
 <script>
+
+L.Map = L.Map.extend({
+    openPopup: function(popup) {
+        this._popup = popup;
+        return this.addLayer(popup).fire('popupopen', {
+            popup: this._popup
+        });
+    }
+});
 
 let Pueblos = new L.featureGroup()
 let Trekking = new L.featureGroup()
@@ -66,24 +70,36 @@ var CartoDB_VoyagerOnlyLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/r
 
 // Zoom controls
 L.control.zoom({
-     position:'topright'
+     position:'bottomright'
 }).addTo(map);
 
 
 //Mostrar la ruta
 
+var popupVia = L.popup()
+    .setLatLng([-13.60765,-71.74924])   
+    .setContent('De Cusco a Vinicunca son 3 horas aprox. en auto')
+    .openOn(map)
+
 var Pistas = L.geoJson(mapavias, {
-  filter: function(feature, layer) {
-      if (feature.geometry.type === 'LineString')
-        return true;
-    },
   style: function(feature) {
-      return {color: "#32a663"}; 
+      return {color: "#2B877F"}; 
     },
-  // pointToLayer: function (feature, latlng) {
-  //   return L.circleMarker(latlng, punto).bindTooltip(feature.properties.name)
-  //   }
-}).addTo(map);
+  onEachFeature: function (feature,layer) {
+    layer.bindPopup(popupVia,{autoClose:false, className:'popupvias', offset:[-20,130],
+     maxWidth:120} )
+    }
+  }).addTo(map)
+
+// //Bounds
+map.fitBounds(Pistas.getBounds());
+
+Pistas.snakeIn()
+Pistas.on('snakeend',function(){
+popupVia.openOn(map)
+Vinicunca.openPopup()
+})
+
 
 // iconos
 
@@ -91,47 +107,48 @@ var montanaIcon = L.icon({
   iconUrl: 'img/montanas.svg',
   iconSize: [20,20],
   iconAnchor: [10,10],
-  //popupAnchor: [-35,9]
+  popupAnchor: [0,-9]
 })
 
 var puebloIcon = L.icon({
   iconUrl: 'img/house.svg',
   iconSize: [20,20],
   iconAnchor: [10,10],
-  popupAnchor: [-30,2]
+  popupAnchor: [0,-9]
 })
 
 var monumentIcon = L.icon({
   iconUrl: 'img/monument.svg',
-  iconSize: [24,24],
-  iconAnchor: [12,12],
-  //popupAnchor: [9,9]
+  iconSize: [20,20],
+  iconAnchor: [10,10],
+  popupAnchor: [0,-9]
 })
 
 var trekIcon = L.icon({
   iconUrl: 'img/people.svg',
-  iconSize: [23,23],
-  iconAnchor: [11.5,11.5],
-  //popupAnchor: [-70,9]
+  iconSize: [20,20],
+  iconAnchor: [10,10],
+  popupAnchor: [0,-9]
 })
 
 var escaladaIcon = L.icon({
   iconUrl: 'img/escalada.svg',
   iconSize: [20,20],
   iconAnchor: [10,10],
-  //popupAnchor: [-70,9]
+  popupAnchor: [0,-9]
 })
 
 
 
 // Obtener datos del csv y agregarlos al mapa
 
-function Lugar (lugar, tipo, descripcion, lon, lat) {
+function Lugar (lugar, tipo, descripcion, lon, lat, url) {
   this.lugar = lugar
   this.tipo = tipo
   this.descripcion= descripcion
   this.lon= lon
   this.lat= lat
+  this.url = url
 }
 
 async function getData() {
@@ -145,14 +162,18 @@ async function getData() {
     const descripcion = columns[2]
     const lon = parseFloat(columns[3])
     const lat = parseFloat(columns[4])
-    nuevoLugar = new Lugar(lugar, tipo, descripcion,lon,lat)
+    const url = columns[5]
+    nuevoLugar = new Lugar(lugar, tipo, descripcion,lon,lat,url)
     var popup = L.popup()
-    .setContent(nuevoLugar.lugar + '<br/>' + nuevoLugar.descripcion)
+    .setContent('<h3>'+ nuevoLugar.lugar +'</h3>' + '<br/>' + '<p>' + nuevoLugar.descripcion + 
+     '</p>' + '<br/>' + '<a href="' + nuevoLugar.url + '">' + nuevoLugar.url )
     switch (nuevoLugar.tipo) {
       case 'pueblo': return L.marker([nuevoLugar.lat,nuevoLugar.lon],{icon: puebloIcon})
       .addTo(Pueblos).addTo(map).bindPopup(popup)
       break
       case 'montaña': return L.marker([nuevoLugar.lat,nuevoLugar.lon],{icon:montanaIcon})
+      .addTo(Montana).addTo(map).bindPopup(popup)
+      case 'vinicunca': return Vinicunca = L.marker([nuevoLugar.lat,nuevoLugar.lon],{icon:montanaIcon})
       .addTo(Montana).addTo(map).bindPopup(popup)
       break
       case 'arqueologia': return L.marker([nuevoLugar.lat,nuevoLugar.lon],{icon: monumentIcon})
@@ -215,8 +236,6 @@ Arqueologia.on('click', function (e) {
 })
 
 
-//Bounds
-map.fitBounds(Pistas.getBounds());
     
 </script>
 

@@ -68,27 +68,47 @@ label input[type="checkbox"]:checked {
       background: red;
 }
 
-.leaflet-popup-tip-container {
-  display: none;
-  /* transform: rotate(180deg);
-  position: relative;
-  left: 50%;
-  top: -53px; */
+.leaflet-popup-tip {
+  background: rgba(255, 255, 255,0.8);
 }
+
 .leaflet-popup-content-wrapper {
   border-radius: 8px;
   color: #000000;
-  background-color: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.65);
+  background: rgba(255, 255, 255, 0.7);
+  /* box-shadow: 0 1px 7px rgba(0, 0, 0, 0.65); */
 }
 
 .leaflet-container a.leaflet-popup-close-button{
   font: 10px Tahoma, Verdana, sans-serif;
   /* padding: 10px;  */
 }
-
 .leaflet-popup-content {
-  margin:8px 15px 1px 5px
+  line-height: 0.9;
+  margin: 10px 10px
+}
+.leaflet-popup-content h3 {
+  color: #e69522;
+  margin-block-end: 0em;
+  margin-block-start: 0em;
+}
+
+.leaflet-popup-content p {
+  margin-block-end: 0em;
+  margin-block-start: 0em;
+}
+/* popup de como llegar */
+
+.popupvias .leaflet-popup-content-wrapper {
+  background-color: rgba(43, 135, 127);
+  border: 50px red;
+  color: white;
+}
+.popupvias .leaflet-popup-content{
+  line-height: 1.2;
+}
+.popupvias .leaflet-popup-tip-container {
+  display: none
 }
 
 .creditos {

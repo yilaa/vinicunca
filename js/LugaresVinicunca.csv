@@ -1,12 +1,12 @@
-Nombre,Tipo,Descripción,lon,lat
-Checacupe,pueblo,,-71.4543617,-14.0261281
-Chacco Huayllasca,escalada,Zona de escalada,-71.410182,-13.9360608
-Machu Pitumarka,arqueologia,Complejo arqueológico inca,-71.3996855,-13.9656346
-Vinicunca,montaña,Montaña de siete colores,-71.3029908,-13.8703881
-Valle Rojo,caminata,,-71.3078376,-13.8753144
-Cañón de Ananiso,caminata,,-71.2623962,-13.9813783
-Pitumarca,pueblo,,-71.4173501,-13.9803737
-Chari,pueblo,Asociación de Turismo Vivencial Chari,-71.4292711,-13.9951683
-Uchullucllo,pueblo,,-71.3091614,-13.970871
-Willkacunca,montaña,Montaña de doce colores,-71.2821809,-13.9849538
-Kayrahuiri,caminata,Inicio de la caminata al Apu Vinicunca - Asociación Central de Arrieros Apu Winikunka,-71.2643156,-13.8827018
+Nombre,Tipo,Descripción,lon,lat, url
+Checacupe,pueblo,Pueblo apacible con tres puentes de tres épocas distintas.,-71.4543617,-14.0261281,
+Chacco Huayllasca,escalada,Zona de escalada,-71.410182,-13.9360608,https://www.vinicuncacusco.com
+Machu Pitumarka,arqueologia,Complejo arqueológico inca,-71.3996855,-13.9656346,
+Vinicunca,vinicunca,Montaña de siete colores,-71.3029908,-13.8703881,
+Valle Rojo,caminata,,-71.3078376,-13.8753144,https://www.vinicuncacusco.com
+Cañón de Ananiso,caminata,,-71.2623962,-13.9813783,https://www.vinicuncacusco.com
+Pitumarca,pueblo,,-71.4173501,-13.9803737,
+Chari,pueblo,,-71.4292711,-13.9951683,
+Ochollocllo,pueblo,,-71.3091614,-13.970871,
+Willkacunca,montaña,Montaña de doce colores,-71.2821809,-13.9849538,https://www.vinicuncacusco.com
+Kayrahuiri,caminata,Inicio de la caminata al Apu Vinicunca,-71.2643156,-13.8827018,
