@@ -58,16 +58,33 @@ map.createPane('labels');
 // map.getPane('labels').style.zIndex = 500;
 map.getPane('labels').style.pointerEvents = 'none';
 
-var CartoDB_VoyagerNoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> <a href="https://carto.com/attributions">CARTO</a>',
+// var CartoDB_VoyagerNoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
+// 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> <a href="https://carto.com/attributions">CARTO</a>',
+// }).addTo(map);
+
+// var CartoDB_VoyagerOnlyLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', {
+// 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> <a href="https://carto.com/attributions">CARTO</a>',
+// 	pane: 'labels'
+// }).addTo(map);
+
+var CartoDB_Voyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
 }).addTo(map);
 
-var CartoDB_VoyagerOnlyLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', {
-	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> <a href="https://carto.com/attributions">CARTO</a>',
-	pane: 'labels'
-}).addTo(map);
+var Stamen_Toner = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.png', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+});
 
+var Stadia_AlidadeSmooth = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+});
 
+var baseMaps = {
+    // "Carto": CartoDB_VoyagerNoLabels,CartoDB_VoyagerOnlyLabels,
+    "Stamen": Stamen_Toner,
+    "Stadia": Stadia_AlidadeSmooth,
+    "Carto": CartoDB_Voyager,
+};
 // Zoom controls
 L.control.zoom({
      position:'bottomright'
@@ -207,7 +224,7 @@ var overlays= {
   "Escalada": Escalada
 }
 
-L.control.layers(null, overlays, {
+L.control.layers(baseMaps, overlays, {
   collapsed: false,
   position: 'topleft',
   }).addTo(map);

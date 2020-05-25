@@ -133,8 +133,4 @@ label input[type="checkbox"]:checked {
   .header p {
     font-size: small;
   }
-
-  .leaflet-control-zoom {
-    display: none;
-  }
 }
