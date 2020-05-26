@@ -9,7 +9,7 @@
 <meta property="og:title" content="Mapa Vinicunca " />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="yilaa" />
-<meta property="og:url" content="https://yilaa.github.io/rutacafejaen" />
+<meta property="og:url" content="https://vinicuncacusco.com" />
 <meta property="og:description" content="Mapa Vinicunca." />
 <link href="https://fonts.googleapis.com/css?family=Bree+Serif&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
@@ -57,33 +57,18 @@ map.createPane('labels');
 // map.getPane('labels').style.zIndex = 500;
 map.getPane('labels').style.pointerEvents = 'none';
 
-// var CartoDB_VoyagerNoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
-// 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> <a href="https://carto.com/attributions">CARTO</a>',
-// }).addTo(map);
+var CartoDB_PositronNoLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+	subdomains: 'abcd',
+}).addTo(map)
 
-// var CartoDB_VoyagerOnlyLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png', {
-// 	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> <a href="https://carto.com/attributions">CARTO</a>',
-// 	pane: 'labels'
-// }).addTo(map);
+var CartoDB_PositronOnlyLabels = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
+	attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  subdomains: 'abcd',
+  pane: 'labels'
+}).addTo(map)
 
-var CartoDB_Voyager = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-	attribution: '<a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-})
 
-var Stamen_Toner = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.png', {
-	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-});
-
-var Stadia_AlidadeSmooth = L.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png', {
-	attribution: '<a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
-}).addTo(map);
-
-var baseMaps = {
-    // "Carto": CartoDB_VoyagerNoLabels,CartoDB_VoyagerOnlyLabels,
-    "Stamen": Stamen_Toner,
-    "Stadia": Stadia_AlidadeSmooth,
-    "Carto": CartoDB_Voyager,
-};
 // Zoom controls
 L.control.zoom({
      position:'bottomright'
@@ -223,9 +208,9 @@ var overlays= {
   "Escalada": Escalada
 }
 
-L.control.layers(baseMaps, overlays, {
+L.control.layers(null, overlays, {
   collapsed: false,
-  position: 'topleft',
+  position: 'topright',
   }).addTo(map);
 
 // Al click de un ícono
