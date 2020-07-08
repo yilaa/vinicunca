@@ -8,27 +8,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta property="og:title" content="Mapa Vinicunca " />
 <meta property="og:type" content="website" />
-<meta property="og:site_name" content="yilaa" />
+<meta property="og:site_name" content="Vinicunca Cusco" />
 <meta property="og:url" content="https://vinicuncacusco.com" />
 <meta property="og:description" content="Mapa Vinicunca." />
-<link href="https://fonts.googleapis.com/css?family=Bree+Serif&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.2/dist/leaflet.css" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
-<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" />
 <link rel="stylesheet" href="style.css" />
 
 <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"></script>
 <script type="text/javascript" src="js/pistas.js"></script>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 <script src="js/animation.js"></script>
+<script type="text/javascript" src="js/leaflet.smoothmarkerbouncing.js"></script>
 </head>
 
 <body>
-<a class="creditos" href="http://www.turismotec.org" target="_blank">Diseñado por TurismoTec.org</a>
-<div id='map'>
+<div class=overlay>
+  <label class="container">Trekking
+      <input type="checkbox" id="trek" onclick="trekking()">
+      <span class="checkmark"></span>
+  </label>
+</div>
+<div class="leyenda">
+  <h3>Leyenda</h1>
+  <ul>
+    <li class="leyenda__item"><img src="img/house.svg" width="15px"> Pueblos</li>
+    <li class="leyenda__item"><img src="img/montanas.svg" width="15px"> Montañas</li>
+    <li class="leyenda__item"><img src="img/monument.svg" width="15px"> Sitio arqueológico</li>
+    <li class="leyenda__item"><img src="img/canyon.svg" width="15px"> Cañón</li>
+    <li class="leyenda__item"><img src="img/escalada.svg" width="15px"> Escalada</li>
+  </ul>
+</div>
+<p class="creditos"> Iconos de <a href="https://www.flaticon.com/" title="Flaticon"> Flaticon</a>
+</p>
+  <div id='map'>
 </div>
 <script>
 
@@ -42,7 +54,7 @@ L.Map = L.Map.extend({
 });
 
 let Pueblos = new L.featureGroup()
-let Trekking = new L.featureGroup()
+let Canon = new L.featureGroup()
 let Arqueologia = new L.featureGroup()
 let Escalada = new L.featureGroup()
 let Montana = new L.featureGroup()
@@ -51,7 +63,11 @@ var map = L.map('map', {
     //zoom: 10,
     zoomControl: false,
     closePopupOnClick: false,
-    layers: [Montana, Pueblos, Arqueologia, Escalada, Trekking]
+    scrollWheelZoom: false,
+    // touchZoom: true,
+    // dragging: !L.Browser.mobile,
+    // tap: false,
+    layers: [Montana, Pueblos, Arqueologia, Escalada, Canon]
 });
 map.createPane('labels');
 // map.getPane('labels').style.zIndex = 500;
@@ -125,10 +141,10 @@ var monumentIcon = L.icon({
   popupAnchor: [0,-9]
 })
 
-var trekIcon = L.icon({
-  iconUrl: 'img/people.svg',
-  iconSize: [20,20],
-  iconAnchor: [10,10],
+var canonIcon = L.icon({
+  iconUrl: 'img/canyon.svg',
+  iconSize: [22,22],
+  iconAnchor: [11,11],
   popupAnchor: [0,-9]
 })
 
@@ -165,12 +181,15 @@ async function getData() {
     const lat = parseFloat(columns[4])
     const url = columns[5]
     nuevoLugar = new Lugar(lugar, tipo, descripcion,lon,lat,url)
+    var popupPueblos = L.popup()
+    .setContent('<h3>'+ nuevoLugar.lugar +'</h3>' + '<br/>' + '<p>' + nuevoLugar.descripcion + 
+     '</p>')
     var popup = L.popup()
     .setContent('<h3>'+ nuevoLugar.lugar +'</h3>' + '<br/>' + '<p>' + nuevoLugar.descripcion + 
-     '</p>' + '<br/>' + '<a href="' + nuevoLugar.url + '">' + nuevoLugar.url )
+     '</p>' + '<br/>' + '<center><a href="' + nuevoLugar.url + '">' + '<img src="img/plus.svg">'+'</a></center>')
     switch (nuevoLugar.tipo) {
       case 'pueblo': return L.marker([nuevoLugar.lat,nuevoLugar.lon],{icon: puebloIcon})
-      .addTo(Pueblos).addTo(map).bindPopup(popup)
+      .addTo(Pueblos).addTo(map).bindPopup(popupPueblos)
       break
       case 'montaña': return L.marker([nuevoLugar.lat,nuevoLugar.lon],{icon:montanaIcon})
       .addTo(Montana).addTo(map).bindPopup(popup)
@@ -180,8 +199,8 @@ async function getData() {
       case 'arqueologia': return L.marker([nuevoLugar.lat,nuevoLugar.lon],{icon: monumentIcon})
       .addTo(Arqueologia).addTo(map).bindPopup(popup)
       break 
-      case 'caminata': return L.marker([nuevoLugar.lat,nuevoLugar.lon],{icon: trekIcon})
-      .addTo(Trekking).addTo(map).bindPopup(popup)
+      case 'cañon': return L.marker([nuevoLugar.lat,nuevoLugar.lon],{icon: canonIcon})
+      .addTo(Canon).addTo(map).bindPopup(popup)
       break
       case 'escalada': return L.marker([nuevoLugar.lat,nuevoLugar.lon],{icon: escaladaIcon})
       .addTo(Escalada).addTo(map).bindPopup(popup)
@@ -204,14 +223,14 @@ var overlays= {
   "Pueblos": Pueblos,
   "Montañas": Montana,
   "Arqueología": Arqueologia,
-  "Trekking": Trekking,
+  "Cañón": Canon,
   "Escalada": Escalada
 }
 
-L.control.layers(null, overlays, {
-  collapsed: false,
-  position: 'topright',
-  }).addTo(map);
+// L.control.layers(null, overlays, {
+//   collapsed: false,
+//   position: 'topright',
+//   }).addTo(map);
 
 // Al click de un ícono
 
@@ -223,7 +242,7 @@ Montana.on('click', function (e) {
   map.flyTo([e.latlng.lat,e.latlng.lng],13,{
               duration: 0.15})
 })
-Trekking.on('click', function (e) { 
+Canon.on('click', function (e) { 
   map.flyTo([e.latlng.lat,e.latlng.lng],13,{
               duration: 0.15})
 })
@@ -236,7 +255,46 @@ Arqueologia.on('click', function (e) {
               duration: 0.15})
 })
 
+// al click de trekking
 
+
+function trekking () {
+  if (document.getElementById('trek').checked){
+    Montana.eachLayer(function Rebotar(marker){
+      marker.setBouncingOptions({
+        bounceSpeed:100,
+        elastic: false,
+      })
+      marker.bounce()
+    })
+    Arqueologia.eachLayer(function Rebotar(marker){
+      marker.setBouncingOptions({
+        bounceSpeed:100,
+        elastic: false,
+      })
+      marker.bounce()
+    })
+    Canon.eachLayer(function Rebotar(marker){
+      marker.setBouncingOptions({
+        bounceSpeed:100,
+        elastic: false,
+      })
+      marker.bounce()
+    })
+    Escalada.eachLayer(function Rebotar(marker){
+      marker.setBouncingOptions({
+        bounceSpeed:100,
+        elastic: false,
+      })
+      marker.bounce()
+    })
+    } else {
+    Montana.eachLayer(function(marker){marker.stopBouncing()})
+    Escalada.eachLayer(function(marker){marker.stopBouncing()})
+    Canon.eachLayer(function(marker){marker.stopBouncing()})
+    Arqueologia.eachLayer(function(marker){marker.stopBouncing()})
+  }
+}
     
 </script>
 

@@ -7,67 +7,96 @@ html, body, #map {
     width: 100vw;
 }
 
-#overlay {
-  position: absolute;
+/* Opción de trekking */
+.overlay {
   z-index: 2000;
-  margin: 10px;
-  padding: 6px;
-  max-width: 400px;
-}
-
-.header {
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 10px;
-  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.65);
-}
-
-.header h2 {
-  color: #32a663;
-  font-family: 'Bree Serif', serif;
-  margin: 0px;
-  padding: 5px 8px;
-}
-
-.header p {
-  font-family: 'Bree Serif', serif;
-  padding: 3px 8px;
-  margin: 0px;
-  color: #e69522;
-}
-.home{ 
-  cursor: pointer;
+  right: 10px;
+  top: 240px;
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.90);
+  box-shadow: 0 1px 5px rgba(0,0,0,0.4);
   border-radius: 5px;
-  padding: 3px;
-  color: #e69522;
-  font-weight: bold;
-  text-decoration: none;
-  font-size: 11px;
-  outline: none;
-  transition: .3s;
-  background-color: white;
-  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.35);
-  font-family: Arial, Helvetica, sans-serif;
+  padding: 6px 10px 2px 6px;
+  width: 110px;
 }
 
+.container {
+  display: block;
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  font-size: 22px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+/* Esconde el default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Crea el custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 13px;
+  width: 13px;
+  border-radius: 2px;
+  background-color: #ffffff;
+  border: solid #000000;
+  border-width: 1px;
+}
+.container input:checked ~ .checkmark {
+  background-color: #2074F8;
+  border-width: 0px;
+}
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 4px;
+  top: 0px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* Panel de control de layers */
 .leaflet-left .leaflet-control {
   margin-left: 20px;
 }
 
 .leaflet-top .leaflet-control {
-  margin-top: 20px;
+  margin-top: 120px;
 }
 .leaflet-control-layers-expanded {
   background: rgba(255, 255, 255, 0.90);
 }
 
-
-input[type="checkbox"] {
-    background: red;
-}
-label input[type="checkbox"]:checked {
-      background: red;
-}
-
+/* Popup de iconos */
 .leaflet-popup-tip {
   background: rgba(255, 255, 255,0.8);
 }
@@ -80,8 +109,9 @@ label input[type="checkbox"]:checked {
 }
 
 .leaflet-container a.leaflet-popup-close-button{
-  font: 10px Tahoma, Verdana, sans-serif;
-  /* padding: 10px;  */
+  font: 14px Tahoma, Verdana, sans-serif;
+  padding: 0px;
+  color: #000000;
 }
 .leaflet-popup-content {
   line-height: 0.9;
@@ -105,11 +135,40 @@ label input[type="checkbox"]:checked {
   color: white;
 }
 .popupvias .leaflet-popup-content{
-  line-height: 1.2;
+  line-height: 1.4;
 }
 .popupvias .leaflet-popup-tip-container {
   display: none
 }
+/* Leyenda */
+
+.leyenda {
+  position: absolute;
+  z-index: 2000;
+  top: 60px;
+  margin: 0;
+  right: 10px;
+  font: 12px/1.5 "Helvetica Neue", Arial, Helvetica, sans-serif;
+  line-height: 1.7;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 5px;
+  box-shadow: 0 1px 7px rgba(0, 0, 0, 0.65);
+  padding: 5px;
+}
+.leyenda h3 {
+  margin: 0px;
+}
+.leyenda ul {
+  list-style: none;
+  padding: 2px 0px;
+  margin: 0px;
+}
+
+.leyenda a {
+  text-decoration: none;
+  font-size: small;
+}
+
 
 .creditos {
   position: absolute;
@@ -126,11 +185,17 @@ label input[type="checkbox"]:checked {
 }
 
 @media only screen and (max-width: 767px){
-
-  .header h2 {
-    font-size: large;
+  .leaflet-left .leaflet-control {
+    margin-left: 20px;
   }
-  .header p {
-    font-size: small;
+  
+  .leaflet-top .leaflet-control {
+    margin-top: 20px;
+  }
+  .overlay {
+    top: 160px
+  }
+  .leyenda {
+    top: 10px;
   }
 }
